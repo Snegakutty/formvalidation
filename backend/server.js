@@ -1,5 +1,5 @@
-require('dotenv').config(); 
 const express = require('express');
+
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql2');
@@ -9,12 +9,11 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: 'localhost',
+  user: 'root', 
+  password: 'Snega@23', 
+  database: 'test', 
 });
 
 db.connect((err) => {
@@ -25,10 +24,11 @@ db.connect((err) => {
   }
 });
 
+// API to Add Employees
 app.post('/api/employees', (req, res) => {
   const { name, employeeId, email, phoneNumber, department, dateOfJoining, role } = req.body;
 
-  // Backend Validations
+  //validate
   if (!name || !employeeId || !email || !phoneNumber || !department || !dateOfJoining || !role) {
     return res.status(400).json({ message: 'All fields are required.' });
   }
@@ -46,6 +46,7 @@ app.post('/api/employees', (req, res) => {
     return res.status(400).json({ message: 'Date of Joining cannot be in the future.' });
   }
 
+  // check already exist or not
   const checkQuery = `SELECT * FROM employees WHERE employeeId = ? OR email = ?`;
   db.query(checkQuery, [employeeId, email], (err, results) => {
     if (err) {
@@ -67,7 +68,7 @@ app.post('/api/employees', (req, res) => {
   });
 });
 
-// Start Server
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
