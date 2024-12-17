@@ -1,0 +1,22 @@
+services:
+  - name: frontend
+    type: web
+    env: docker
+    plan: free
+    dockerfilePath: ./frontend/Dockerfile
+    buildCommand: npm install && npm run build
+    startCommand: nginx -g 'daemon off;'
+    envVars:
+      - key: PORT
+        value: "80"
+
+  - name: backend
+    type: web
+    env: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: "5000"
