@@ -42,7 +42,7 @@ const AddEmployeeForm = () => {
     if (!validate()) return;
 
     try {
-      const response = await fetch('https://formvalidation-2-exnw.onrender.com/employees', {
+      const response = await fetch('http://localhost:5000/api/employees', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
